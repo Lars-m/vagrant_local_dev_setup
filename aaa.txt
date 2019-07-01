@@ -1,0 +1,12 @@
+a
+b
+c
+d
+hello world
+hello world
+hello world
+e
+f
+g
+sed '/d/a\hello world' a.txt > aaa.txt; mv aaa.txt a.txt
+hello world
