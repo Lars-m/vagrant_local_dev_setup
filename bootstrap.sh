@@ -5,8 +5,6 @@ sudo groupadd tomcat
 sudo useradd -s /bin/false -g tomcat -d /opt/tomcat tomcat
 
 cd /tmp
-
-
 sudo curl -O http://mirrors.dotsrc.org/apache/tomcat/tomcat-9/v9.0.21/bin/apache-tomcat-9.0.21.tar.gz
 sudo mkdir /opt/tomcat
 sudo tar xzvf apache-tomcat-9*tar.gz -C /opt/tomcat --strip-components=1
@@ -39,7 +37,7 @@ sudo cat <<- EOF_TCU > /opt/tomcat/conf/tomcat-users.xml
 </tomcat-users>
 EOF_TCU
 
-
+echo ""
 echo "################################################################################"
 echo "#######             Setup manager context.xml                            #######"
 echo "####### Allows access from browsers NOT running on same server as Tomcat #######"
@@ -47,17 +45,19 @@ echo "##########################################################################
 
 sudo rm /opt/tomcat/webapps/manager/META-INF/context.xml
 sudo cat <<- EOF_CONTEXT > /opt/tomcat/webapps/manager/META-INF/context.xml
-<?xml version="1.0" encoding="UTF-8"?>
-<Context antiResourceLocking="false" privileged="true" >
-  <!--<Valve className="org.apache.catalina.valves.RemoteAddrValve"
-         allow="127\.\d+\.\d+\.\d+|::1|0:0:0:0:0:0:0:1" />-->
-  <Manager sessionAttributeValueClassNameFilter="java\.lang\.(?:Boolean|Integer|Long|Number|String)|org\.apache\.catalina\.filters\.CsrfPreventionFilter\$LruCache(?:\$1)?|java\.util\.(?:Linked)?HashMap"/>
-</Context>
+ <?xml version="1.0" encoding="UTF-8"?>
+ <Context antiResourceLocking="false" privileged="true" >
+   <!--<Valve className="org.apache.catalina.valves.RemoteAddrValve"
+          allow="127\.\d+\.\d+\.\d+|::1|0:0:0:0:0:0:0:1" />-->
+   <Manager sessionAttributeValueClassNameFilter="java\.lang\.(?:Boolean|Integer|Long|Number|String)|org\.apache\.catalina\.filters\.CsrfPreventionFilter\$LruCache(?:\$1)?|java\.util\.(?:Linked)?HashMap"/>
+ </Context>
 EOF_CONTEXT
 
 
-
-echo "############ Create tomcat.service file ############"
+echo ""
+echo "################################################################################"
+echo "############################ Create tomcat.service file ########################"
+echo "################################################################################"
 # Inspired by this tutorial: https://www.digitalocean.com/community/tutorials/install-tomcat-9-ubuntu-1804
 
 sudo cat <<- EOF > /etc/systemd/system/tomcat.service
