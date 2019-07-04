@@ -4,19 +4,36 @@ Copy script in via the clipboard
 # Mark the script as executable
 chmod +x setup.sh
 
-#Below is not used
+//Usefull if automating mysql_secure_setup
+
 UNINSTALL COMPONENT 'file://component_validate_password';
 SET GLOBAL validate_password_policy = 0;
+
+
+pw="test"
+devpw="dev"
+MYSQL_PWD=$pw mysql -u root <<_EOF_
+DELETE FROM mysql.user WHERE User='';
+DELETE FROM mysql.user WHERE User='root' AND Host NOT IN ('localhost', '127.0.0.1', '::1');
+DROP DATABASE IF EXISTS test;
+DELETE FROM mysql.db WHERE Db='test' OR Db='test\\_%';
+FLUSH PRIVILEGES;
+_EOF_
+
+MYSQL_PWD=$pw mysql -u root <<_EOF2_
+CREATE USER 'dev'@'localhost' IDENTIFIED BY $dev;
+GRANT ALL PRIVILEGES ON *.* TO 'dev'@'localhost' WITH GRANT OPTION;
+_EOF2_
+
+
+
+
+
+
+
 
 # Se what is stored in debconf:
 debconf-show mysql-community-server
 
 debconf-get-selections
 sudo debconf-get-selections | grep mysql
-
-
-Curent status
-
-Database is setup with a root user and a dev user
-
-TODO: Create a simple testdb and use it with vagrant netbeans and the simple JPA solution "restAndGrizzly"
