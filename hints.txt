@@ -1,0 +1,22 @@
+sudo nano setup.sh
+Copy script in via the clipboard
+
+# Mark the script as executable
+chmod +x setup.sh
+
+#Below is not used
+UNINSTALL COMPONENT 'file://component_validate_password';
+SET GLOBAL validate_password_policy = 0;
+
+# Se what is stored in debconf:
+debconf-show mysql-community-server
+
+debconf-get-selections
+sudo debconf-get-selections | grep mysql
+
+
+Curent status
+
+Database is setup with a root user and a dev user
+
+TODO: Create a simple testdb and use it with vagrant netbeans and the simple JPA solution "restAndGrizzly"
